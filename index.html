@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0d1117">
+<meta name="supported-color-schemes" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>The Hoe Ass Dynasty Dispatch — Archive</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --border-soft: #21262d;
+    --text: #c9d1d9;
+    --text-bright: #f0f6fc;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-soft: rgba(88,166,255,0.06);
+    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+      "Inter", "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { color-scheme: dark; }
+  }
+  * {
+    box-sizing: border-box;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #0d1117;
+    background-color: var(--bg);
+  }
+  body {
+    color: var(--text);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    font-size: clamp(16px, 4vw, 17px);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    min-height: 100dvh;
+    color-scheme: dark only;
+  }
+  .accent-stripe {
+    height: 3px;
+    background: var(--accent);
+    width: 100%;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding:
+      max(1.75rem, env(safe-area-inset-top))
+      max(1.25rem, env(safe-area-inset-right))
+      max(2.5rem, env(safe-area-inset-bottom))
+      max(1.25rem, env(safe-area-inset-left));
+  }
+
+  /* ============ MASTHEAD ============ */
+  .masthead {
+    border-bottom: 0.5px solid var(--border);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .masthead-eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .masthead-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .masthead-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+  .masthead-issue {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .masthead-title {
+    font-size: clamp(24px, 6.5vw, 30px);
+    font-weight: 600;
+    color: var(--text-bright);
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .masthead-title .league { color: var(--accent); }
+  .masthead-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ============ INTRO ============ */
+  .intro {
+    margin-bottom: 2.5rem;
+    color: var(--text);
+  }
+  .intro p {
+    margin: 0 0 1rem;
+  }
+  .intro p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ============ SECTION HEADER ============ */
+  h2 {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin: 2rem 0 1rem;
+    text-transform: uppercase;
+    padding-bottom: 8px;
+    border-bottom: 0.5px solid var(--border-soft);
+  }
+  h2:first-of-type {
+    margin-top: 0;
+  }
+
+  /* ============ ISSUES LIST ============ */
+  .issues {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .issue-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    padding: 16px 14px;
+    border-radius: 6px;
+    border: 0.5px solid var(--border-soft);
+    margin-bottom: 10px;
+    background: var(--surface);
+    border-left: 2px solid var(--accent);
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  .issue-link:hover {
+    background: var(--accent-soft);
+    border-color: var(--border);
+    border-left-color: var(--accent);
+  }
+  .issue-link:last-child {
+    margin-bottom: 0;
+  }
+  .issue-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .issue-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .issue-tag-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    opacity: 0.6;
+  }
+  .issue-date {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .issue-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-bright);
+    margin: 0 0 4px;
+    line-height: 1.3;
+  }
+  .issue-blurb {
+    font-size: 14px;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ============ EMPTY STATE / FUTURE ISSUES ============ */
+  .empty-state {
+    padding: 18px 14px;
+    border-radius: 6px;
+    border: 0.5px dashed var(--border);
+    color: var(--text-muted);
+    font-size: 14px;
+    font-style: italic;
+    text-align: center;
+  }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    border-top: 0.5px solid var(--border);
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .footer p {
+    margin: 0 0 0.5rem;
+  }
+
+  /* ============ MOBILE ============ */
+  @media (max-width: 480px) {
+    body {
+      line-height: 1.6;
+    }
+    .container {
+      padding-top: max(1.25rem, env(safe-area-inset-top));
+      padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    }
+    .masthead {
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    h2 {
+      margin: 1.75rem 0 0.75rem;
+    }
+    .issue-link {
+      padding: 14px 12px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="accent-stripe"></div>
+<div class="container">
+
+  <div class="masthead">
+    <div class="masthead-eyebrow-row">
+      <span class="masthead-eyebrow">The Dispatch</span>
+      <span class="masthead-dot"></span>
+      <span class="masthead-issue">Archive</span>
+    </div>
+    <h1 class="masthead-title">The <span class="league">Hoe Ass Dynasty</span> Dispatch</h1>
+    <div class="masthead-sub">Weekly column · Hoe Ass Dynasty League</div>
+  </div>
+
+  <div class="intro">
+    <p>The official column of the Hoe Ass Dynasty League. A weekly look at power rankings, transactions, and the storylines that define the season — plus pre-draft editions, deadline coverage, and championship recaps.</p>
+    <p>Every issue archived below.</p>
+  </div>
+
+  <h2>Latest Issue</h2>
+  <ul class="issues">
+    <li>
+      <a class="issue-link" href="predraft-2026.html">
+        <div class="issue-meta">
+          <span class="issue-tag">Pre-Draft Edition</span>
+          <span class="issue-tag-dot"></span>
+          <span class="issue-date">2026 Rookie Draft</span>
+        </div>
+        <h3 class="issue-title">The 2026 Pre-Draft Edition</h3>
+        <p class="issue-blurb">Power rankings heading into the rookie draft, every team's pick inventory, the needs board, and the storylines that will define draft night.</p>
+      </a>
+    </li>
+  </ul>
+
+  <h2>Season Archive</h2>
+  <div class="empty-state">
+    Weekly issues will appear here once the season begins.
+  </div>
+
+  <div class="footer">
+    <p>The Hoe Ass Dynasty Dispatch is the official column of the Hoe Ass Dynasty League.</p>
+    <p>Compiled and edited by your commissioner.</p>
+  </div>
+
+</div>
+</body>
+</html>
