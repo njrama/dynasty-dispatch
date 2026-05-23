@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0d1117">
+<meta name="supported-color-schemes" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>The Hoe Ass Dynasty Dispatch — 2026 Post-Draft Edition</title>
+<style>
+  /* Tell the rendering engine this page IS dark — prevents browser/email
+     dark-mode auto-inversion from breaking the design. */
+  :root {
+    color-scheme: dark;
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --border-soft: #21262d;
+    --text: #c9d1d9;
+    --text-bright: #f0f6fc;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-soft: rgba(88,166,255,0.06);
+    --accent-soft-2: rgba(88,166,255,0.04);
+    --accent-soft-3: rgba(88,166,255,0.025);
+    --accent-fill-2: rgba(88,166,255,0.2);
+    --accent-fill-3: rgba(88,166,255,0.1);
+    --rising: #3fb950;
+    --falling: #f85149;
+    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+      "Inter", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* Force dark in BOTH light and dark system preferences. The design is
+     intentionally dark; we don't auto-flip to light when the OS is light. */
+  @media (prefers-color-scheme: light) {
+    :root { color-scheme: dark; }
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #0d1117;
+    background-color: var(--bg);
+  }
+
+  body {
+    color: var(--text);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    font-size: clamp(16px, 4vw, 17px);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    min-height: 100dvh;
+    color-scheme: dark only;
+  }
+
+  /* Top accent stripe — full bleed, brand mark for the publication */
+  .accent-stripe {
+    height: 3px;
+    background: var(--accent);
+    width: 100%;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding:
+      max(1.75rem, env(safe-area-inset-top))
+      max(1.25rem, env(safe-area-inset-right))
+      max(2.5rem, env(safe-area-inset-bottom))
+      max(1.25rem, env(safe-area-inset-left));
+  }
+
+  /* ============ MASTHEAD ============ */
+  .masthead {
+    border-bottom: 0.5px solid var(--border);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .masthead-eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .masthead-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .masthead-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+  .masthead-issue {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .masthead-title {
+    font-size: clamp(24px, 6.5vw, 30px);
+    font-weight: 600;
+    color: var(--text-bright);
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .masthead-title .league { color: var(--accent); }
+  .masthead-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ============ SECTION HEADERS ============ */
+  h2 {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin: 2.25rem 0 1rem;
+    text-transform: uppercase;
+    padding-bottom: 8px;
+    border-bottom: 0.5px solid var(--border-soft);
+  }
+  h2:first-of-type { margin-top: 0; }
+  h3 {
+    font-size: clamp(15px, 4.2vw, 16px);
+    font-weight: 500;
+    color: var(--text-bright);
+    margin: 1.25rem 0 0.5rem;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    color: var(--text);
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  strong { color: var(--text-bright); font-weight: 500; }
+  em { color: var(--text-muted); font-style: italic; }
+
+  /* ============ DROP CAP (State of the League) ============ */
+  /* Applied to first paragraph of the section. Used CSS class instead of
+     ::first-letter so we can fine-tune size/spacing precisely. */
+  .dropcap::first-letter {
+    float: left;
+    font-size: 3.4em;
+    line-height: 0.85;
+    font-weight: 600;
+    color: var(--accent);
+    padding: 6px 10px 0 0;
+    margin: 4px 0 -2px;
+  }
+
+  /* ============ POWER RANKINGS — podium treatment for top 3 ============ */
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: rank;
+  }
+  ol > li {
+    counter-increment: rank;
+    position: relative;
+    padding: 12px 12px 12px 38px;
+    border-bottom: 0.5px solid var(--border-soft);
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  ol > li:last-child { border-bottom: none; }
+  ol > li::before {
+    content: counter(rank);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.65;
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    width: 24px;
+    text-align: left;
+  }
+  /* Top 3 get the podium treatment: filled badge + accent gradient row */
+  ol > li.rank-1, ol > li.rank-2, ol > li.rank-3 {
+    border-radius: 6px;
+    margin-bottom: 4px;
+    padding: 14px 14px 14px 50px;
+    border-bottom: none;
+  }
+  ol > li.rank-1 {
+    background: linear-gradient(90deg, var(--accent-soft), transparent 70%);
+    border-left: 2px solid var(--accent);
+  }
+  ol > li.rank-2 {
+    background: linear-gradient(90deg, var(--accent-soft-2), transparent 70%);
+    border-left: 2px solid rgba(88,166,255,0.5);
+  }
+  ol > li.rank-3 {
+    background: linear-gradient(90deg, var(--accent-soft-3), transparent 70%);
+    border-left: 2px solid rgba(88,166,255,0.3);
+  }
+  ol > li.rank-1::before,
+  ol > li.rank-2::before,
+  ol > li.rank-3::before {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0;
+    text-align: center;
+    position: absolute;
+    left: 14px;
+    top: 13px;
+  }
+  ol > li.rank-1::before {
+    content: "1";
+    background: var(--accent);
+    color: var(--bg);
+  }
+  ol > li.rank-2::before {
+    content: "2";
+    background: var(--accent-fill-2);
+    border: 0.5px solid rgba(88,166,255,0.6);
+    color: var(--accent);
+  }
+  ol > li.rank-3::before {
+    content: "3";
+    background: var(--accent-fill-3);
+    border: 0.5px solid rgba(88,166,255,0.35);
+    color: var(--accent);
+  }
+
+  /* ============ RANK CHANGE INDICATOR ============ */
+  .rank-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin-left: 6px;
+    padding: 1px 6px 1px 5px;
+    border-radius: 3px;
+    line-height: 1.4;
+    vertical-align: 1px;
+    white-space: nowrap;
+  }
+  .rank-change .arrow {
+    font-size: 9px;
+    line-height: 1;
+    margin-right: 1px;
+  }
+  .rank-change-up {
+    color: var(--rising);
+    background: rgba(63,185,113,0.10);
+  }
+  .rank-change-down {
+    color: var(--falling);
+    background: rgba(248,81,73,0.10);
+  }
+  .rank-change-flat {
+    color: var(--text-muted);
+    background: transparent;
+    padding: 1px 4px;
+  }
+  .rank-change-new {
+    color: var(--accent);
+    background: rgba(88,166,255,0.10);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  /* ============ THREE NUMBERS — card treatment ============ */
+  .three-numbers-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border-soft);
+    border-left: 2px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin: 0 0 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  .three-numbers-card .num {
+    font-size: clamp(32px, 8vw, 40px);
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+  .three-numbers-card .body-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ============ BULLET LISTS (Trending, Superlatives) ============ */
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+  }
+  ul > li {
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--border-soft);
+    color: var(--text);
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  ul > li:last-child { border-bottom: none; }
+
+  code {
+    background: var(--surface);
+    border: 0.5px solid var(--border-soft);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.875em;
+    color: var(--text-bright);
+  }
+
+  hr {
+    border: none;
+    border-top: 0.5px solid var(--border);
+    margin: 2.5rem 0 1.5rem;
+  }
+
+  blockquote {
+    border-left: 2px solid var(--accent);
+    padding: 0.25rem 0 0.25rem 1rem;
+    margin: 1rem 0;
+    color: var(--text);
+  }
+
+  /* ============ MOBILE ============ */
+  @media (max-width: 480px) {
+    body { line-height: 1.6; }
+    .container {
+      padding-top: max(1.25rem, env(safe-area-inset-top));
+      padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    }
+    .masthead { padding-bottom: 1.25rem; margin-bottom: 1.75rem; }
+    h2 { margin: 2rem 0 0.75rem; }
+    ol > li { padding: 12px 8px 12px 36px; }
+    ul > li { padding: 12px 8px; }
+    ol > li.rank-1, ol > li.rank-2, ol > li.rank-3 { padding: 12px 10px 12px 48px; }
+    .three-numbers-card { padding: 14px 14px; gap: 12px; }
+    .dropcap::first-letter {
+      font-size: 3em;
+      padding: 4px 8px 0 0;
+    }
+  }
+
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="accent-stripe"></div>
+<div class="container">
+  <div class="masthead">
+    <div class="masthead-eyebrow-row">
+      <span class="masthead-eyebrow">The Dispatch</span>
+      <span class="masthead-dot"></span>
+      <span class="masthead-issue">Post-Draft Edition · 2026 Rookie Draft</span>
+    </div>
+    <h1 class="masthead-title"><a href="https://njrama.github.io/dynasty-dispatch/" style="color: inherit; text-decoration: none;">The <span class="league">Hoe Ass Dynasty</span> Dispatch</a></h1>
+    <div class="masthead-sub">Friday, May 22, 2026 · Post-Draft Special</div>
+  </div>
+  <h2>THE DYNASTY DISPATCH</h2>
+<h2>Post-Draft Edition — 2026 Rookie Draft Recap</h2>
+<hr>
+<h2>The State of the League</h2>
+<p class="dropcap">The rookie draft is done, and the league looks meaningfully different than it did a week ago. The top got top-heavier — rdfergus walked out with both Jeremiyah Love and Jahmyr Gibbs in the same backfield after two trades that nobody else in the league seems to have fully processed yet. Bateman ran a one-man tight end exchange in real time. Terra finally closed the book on the Bucky Irving saga, and the ending was bleak. Julian, for the second season in a row, sent a first-round pick to his friend in exchange for veterans. Off the field, the league voted to expand bench, IR, and taxi slots — the kind of structural change that tells you the room has decided to take this seriously. Onward.</p>
+<hr>
+<h2>Power Rankings</h2>
+<ol>
+<li class="rank-1"><strong>My team REEKS (rdfergus15)</strong> — Worked the phones nonstop over the past couple weeks. One of those calls turned into the 1.01. The backfield now reads Jeremiyah Love and Jahmyr Gibbs, the QB room added Mendoza in the second, and the receiver corps still has Egbuka and Brian Thomas waiting. There isn't a soft spot on the roster anymore. <span class="rank-change rank-change-up" aria-label="Up 1 from last week"><span class="arrow">▲</span>1</span></li>
+<li class="rank-2"><strong>Cant Kill Bill 🗡️ (jaytherulerx21)</strong> — Took the consensus best player available at 1.03 in Jordyn Tyson, then turned a TE hole into Kyle Pitts via a draft-night swap with Bateman. With the Rashee Rice legal situation hanging over the spring, Jordyn Tyson went from luxury pick to insurance policy overnight. <span class="rank-change rank-change-down" aria-label="Down 1 from last week"><span class="arrow">▼</span>1</span></li>
+<li class="rank-3"><strong>The Tet Offensive (njramadan)</strong> — Spent the entire week treating the RB2 hole like a personal grievance: acquired Dowdle, drafted Coleman at 1.12, came back for Kaytron Allen at 3.02. The reigning champ doesn't trust last year's luck to repeat, and the activity reflects it. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
+<li><strong>kdicillo</strong> — Confidently took Jadarian Price at 1.04 and slotted him into a roster that was asking for youth at the position. Didn't trade, didn't panic, didn't reach. The Branch flier in the second is the swing-for-upside move this roster could afford. <span class="rank-change rank-change-up" aria-label="Up 1 from last week"><span class="arrow">▲</span>1</span></li>
+<li><strong>BatemanS (batemans)</strong> — The picks were good and the trades around them were better. Cleared a tight end logjam by moving Juwan Johnson and Kyle Pitts, then drafted Kenyon Sadiq, because the logjam was apparently load-bearing. <span class="rank-change rank-change-down" aria-label="Down 1 from last week"><span class="arrow">▼</span>1</span></li>
+<li><strong>Green Eggs and Hampton (pking0721)</strong> — Read the pre-draft column, looked at the roster, and actually did something about it. Swapped Gibbs for Puka, then drafted WR in the first two rounds. The WR room is now functional instead of theoretical. The vibes manager is paying attention, which should worry everyone else. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
+<li><strong>SomethingStrange 4 Change (GBdynasty)</strong> — Took the TE upgrade at 1.10 with Eli Stowers and followed it with an Antonio Williams pick that may end up as the steal of the second round. Solid, unsexy, exactly what a contender does in a draft where they pick late. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
+<li><strong>Ms. New Boutte (method8282)</strong> — Hit both needs with the first two picks and didn't try to be a hero. The Stafford trade earlier in the offseason looks better now that there's a 2028 first sitting on the shelf. <span class="rank-change rank-change-up" aria-label="Up 1 from last week"><span class="arrow">▲</span>1</span></li>
+<li><strong>11dhall</strong> — A 24-hour pick timer was apparently not enough infrastructure. Multiple autopicks, two players named Bell, and a new puppy that has apparently consumed the manager's entire attention span. The trajectory remains the same. <span class="rank-change rank-change-down" aria-label="Down 1 from last week"><span class="arrow">▼</span>1</span></li>
+<li><strong>A Swift End (Terra2493)</strong> — Drafted brilliantly. Traded comically. Carnell Tate at 1.02 was the right call, Singleton in the second was the right call, and somehow the headline is still that the Bucky Irving trade from last year has now officially turned into Juwan Johnson. The rebuild has structure now even if the punchlines write themselves. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
+<li><strong>julianad112</strong> — Traded the 1.01 for the 1.05 and two veterans, on a roster that just finished last. In back-to-back seasons, the same manager has shipped a cornerstone asset to the same trade partner for declining veterans. The math, as the saying goes, ain't mathing. <span class="rank-change rank-change-up" aria-label="Up 1 from last week"><span class="arrow">▲</span>1</span></li>
+<li><strong>bhstevens21</strong>  — KC Concepcion at 1.06 was the right pick for a roster that desperately needed young WR juice. The follow-up picks were fine. The bigger question — retool or compete with an aging core — still hasn't been answered, and the draft didn't force the issue. <span class="rank-change rank-change-down" aria-label="Down 1 from last week"><span class="arrow">▼</span>1</span></li>
+</ol>
+<hr>
+<h2>The Draft Report Card</h2>
+<ul>
+<li><strong>rdfergus (My team REEKS)</strong> — <em>Picks:</em> Jeremiyah Love at 1.01 (acquired via trade), plus Fernando Mendoza in the second, a TE depth swing, and a WR flier in the fourth. <em>Analysis:</em> The pre-draft trade was the draft. Everything after it was gravy on an already-great plate.</li>
+<li><strong>Terra (A Swift End)</strong> — <em>Picks:</em> Carnell Tate at 1.02, plus Nick Singleton and two depth swings in the 4th. <em>Analysis:</em> High grade on the picks, separate grade on the surrounding decisions. Both top selections were value-positive.</li>
+<li><strong>Jay (Cant Kill Bill 🗡️)</strong> — <em>Picks:</em> Jordyn Tyson at 1.03, plus Ja'Kobi Lane and Carson Beck in the late rounds. <em>Analysis:</em> Took the BPA and let the board come to him. The Pitts trade mid-draft was the bonus round.</li>
+<li><strong>kdicillo</strong> — <em>Picks:</em> Jadarian Price at 1.04, plus Branch, Thompson, and Delp. <em>Analysis:</em> Added another young backfield piece on the roster without spending anything outside the draft. The kind of class that ages well.</li>
+<li><strong>Julian (julianad112)</strong> — <em>Picks:</em> Makai Lemon at 1.05 (via trade from rdfergus), plus three more WR/RB depth pieces. <em>Analysis:</em> Lemon has to be a hit for the 1.01 trade to age. The rest is depth that doesn't move the needle on a team that finished last.</li>
+<li><strong>bhstevens21</strong> — <em>Picks:</em> KC Concepcion at 1.06, plus Malachi Fields, Ty Simpson, and Jam Miller. <em>Analysis:</em> Identified the biggest roster gap and spent the first two rounds addressing it. Concepcion at 1.06 is a steal if he hits.</li>
+<li><strong>Method (Ms. New Boutte)</strong> — <em>Picks:</em> Omar Cooper at 1.07, plus Emmett Johnson, Demond Claiborne, and Kevin Coleman. <em>Analysis:</em> Hit both needs in the first two rounds. Cooper is the swing that defines the draft.</li>
+<li><strong>pking (Green Eggs and Hampton)</strong> — <em>Picks:</em> Denzel Boston at 1.08, plus Ted Hurst, Mike Washington, and Jack Endries. <em>Analysis:</em> Targeted his guy, got his guy. The WR room finally looks like a WR room.</li>
+<li><strong>Bateman (BatemanS)</strong> — <em>Picks:</em> Kenyon Sadiq at 1.09, plus Germie Bernard, Adam Randall, Deion Burks, and Roman Hemby. <em>Analysis:</em> Five picks, two trades, no wasted motion. The TE shuffle and the Bigsby/Giddens handcuff work were chef's-kiss roster construction.</li>
+<li><strong>GB (SomethingStrange 4 Change)</strong> — <em>Picks:</em> Eli Stowers at 1.10, plus Antonio Williams, Kaelon Black, and Bryce Lance. <em>Analysis:</em> Filled the TE hole in the first, hit on value in the second, and didn't reach once. Solid top to bottom.</li>
+<li><strong>dhall (11dhall)</strong> — <em>Picks:</em> Chris Bell at 1.11, plus Skyler Bell, Michael Trigg, and Le'Veon Moss. The last of those has since retired. <em>Analysis:</em> Multiple autopicks. One rookie already in retirement. That guy will fit right in at the nursing home.</li>
+<li><strong>njramadan (The Tet Offensive)</strong> — <em>Picks:</em> Jonah Coleman at 1.12, plus De'Zhaun Stribling, Kaytron Allen, and Eli Raridon. <em>Analysis:</em> Targeted RB2 help from every direction — trade, draft, and waivers — and got it.</li>
+</ul>
+<hr>
+<h2>Transaction Wire</h2>
+<ul>
+<li><strong>pking ↔ rdfergus: Gibbs for Nacua.</strong> pking shipped Gibbs out to get Puka and supercharge his WR room; rdfergus took the RB upgrade and now runs the deepest backfield in the league. Fair trade for both parties, but the timing — right before making a move for Jeremiyah Love — turned it into a haymaker.</li>
+<li><strong>njramadan ↔ rdfergus: Josh Downs for Rico Dowdle.</strong> A clean swap of needs. Both teams improved at the position they cared about.</li>
+<li><strong>rdfergus ↔ julianad112: the 1.01 swap.</strong> rdfergus sent the 1.05, Courtland Sutton, and Jaylen Warren to Julian for the 1.01. Two veterans for the best player in the draft. The fleece is becoming an annual tradition.</li>
+<li><strong>bateman ↔ Terra: Juwan Johnson for Tank Bigsby and the 2.03.</strong> The infamous Bucky Irving pick has officially completed its journey into Juwan Johnson. There is no further commentary required.</li>
+<li><strong>bateman ↔ jaytheruler: Kyle Pitts for Jalen Coker.</strong> Jay needed a TE; Bateman had a surplus. Both sides walked away happy, which is rare.</li>
+<li><strong>bateman ↔ njramadan: DJ Giddens via pick swap.</strong> Bateman got the Jonathan Taylor handcuff for a 3rd-round pick shuffle. Smart roster construction.</li>
+</ul>
+<hr>
+<h2>Three Numbers</h2>
+<div class="three-numbers-card"><div class="num">2</div><div class="body-text">Number of elite-tier RBs on rdfergus's roster after Tuesday night: Jahmyr Gibbs and Jeremiyah Love. Most rosters in this league don't have one. The contender tier just got a clear leader.</div></div>
+<div class="three-numbers-card"><div class="num">3</div><div class="body-text">Receivers pking drafted or traded for this offseason after entering it with one real name in the room. The newsletter said the WR room needed work. The WR room got worked on.</div></div>
+<div class="three-numbers-card"><div class="num">24</div><div class="body-text">Hours dhall had on the clock for each pick. He still got autopicked. Multiple times. The Bell brothers are now teammates by either design or accident. The manager is unavailable for comment.</div></div>
+<hr>
+<h2>The Crystal Ball</h2>
+<p>Julian trades away his 2028 first before Week 6. The pattern is locked in now — two straight seasons of shipping premium picks to rdfergus for veterans on a last-place roster — and the moment a contender dangles another aging name in front of him, the pick is gone. The only question is whether rdfergus is on the receiving end for a third consecutive year, or whether someone else finally gets a turn at the window.</p>
+<hr>
+<p><em>See you in Week 1. The standings are blank. The receipts are not.</em></p>
+</div>
+</body>
+</html>
