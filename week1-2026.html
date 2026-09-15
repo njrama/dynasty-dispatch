@@ -56,13 +56,21 @@
   body {
     color: var(--text);
     font-family: var(--font-sans);
-    line-height: 1.65;
+    line-height: 1.7;
     font-size: clamp(16px, 4vw, 17px);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
     min-height: 100dvh;
     color-scheme: dark only;
+    /* Subtle vertical gradient — barely perceptible, but adds depth. The
+       page reads as having a "top" instead of a flat slab of color. */
+    background-image:
+      radial-gradient(ellipse 90% 50% at 50% 0%,
+                      rgba(88,166,255,0.04) 0%,
+                      transparent 60%),
+      linear-gradient(180deg, #0d1117 0%, #0b0f15 100%);
+    background-attachment: fixed;
   }
 
   /* Top accent stripe — full bleed, brand mark for the publication */
@@ -117,19 +125,24 @@
     text-transform: uppercase;
   }
   .masthead-title {
-    margin: 0 0 4px;
-    line-height: 0;  /* prevent any extra space below the SVG */
+    font-size: clamp(24px, 6.5vw, 30px);
+    font-weight: 600;
+    color: var(--text-bright);
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
   }
   .masthead-title a {
-    display: block;
+    /* Subtle interactive feedback on the archive link. The link itself
+       remains visually identical to the heading by default. */
+    transition: opacity 0.2s ease, text-shadow 0.2s ease;
   }
-  .masthead-title .masthead-svg {
-    width: 100%;
-    height: auto;
-    display: block;
-    max-width: 720px;  /* cap so it doesn't get gigantic on huge monitors */
+  .masthead-title a:hover,
+  .masthead-title a:focus {
+    opacity: 0.92;
+    text-shadow: 0 0 24px rgba(88,166,255,0.18);
+    outline: none;
   }
-  /* Legacy .league rule kept in case any older content references it */
   .masthead-title .league { color: var(--accent); }
   .masthead-sub {
     font-size: 13px;
@@ -260,6 +273,56 @@
     color: var(--accent);
   }
 
+  /* ============ GROUP CHAT CALLOUT ============ */
+  /* Styled pull-quote rendered between sections. Uses the same visual
+     vocabulary as Three Numbers cards (left accent stripe + surface bg)
+     but with quote-mark typography and a small eyebrow label. */
+  .group-chat-callout {
+    background: var(--surface);
+    border: 0.5px solid var(--border-soft);
+    border-left: 2px solid var(--accent);
+    border-radius: 6px;
+    padding: 18px 22px 16px;
+    margin: 2rem 0 2.25rem;
+    position: relative;
+  }
+  .group-chat-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .group-chat-quote {
+    font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+    font-size: clamp(17px, 4.2vw, 19px);
+    font-style: italic;
+    color: var(--text-bright);
+    line-height: 1.45;
+    margin: 0 0 8px;
+    padding: 0;
+    border: none;  /* override default blockquote border */
+    position: relative;
+  }
+  .group-chat-mark {
+    /* The big opening quote mark — sets the editorial tone. Positioned
+       relative so it sits naturally with the text it leads. */
+    font-family: Georgia, "Playfair Display", "Times New Roman", serif;
+    font-size: 1.6em;
+    line-height: 0.8;
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 4px;
+    vertical-align: -0.18em;
+  }
+  .group-chat-attr {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+    margin-top: 4px;
+  }
+
   /* ============ RANK CHANGE INDICATOR ============ */
   .rank-change {
     display: inline-flex;
@@ -357,7 +420,15 @@
 
   hr {
     border: none;
-    border-top: 0.5px solid var(--border);
+    height: 1px;
+    /* Gradient hr that fades at both edges. Subtle but adds polish. */
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--border) 20%,
+      var(--border) 80%,
+      transparent 100%
+    );
     margin: 2.5rem 0 1.5rem;
   }
 
@@ -370,7 +441,7 @@
 
   /* ============ MOBILE ============ */
   @media (max-width: 480px) {
-    body { line-height: 1.6; }
+    body { line-height: 1.65; }
     .container {
       padding-top: max(1.25rem, env(safe-area-inset-top));
       padding-bottom: max(2rem, env(safe-area-inset-bottom));
@@ -381,6 +452,7 @@
     ul > li { padding: 12px 8px; }
     ol > li.rank-1, ol > li.rank-2, ol > li.rank-3 { padding: 12px 10px 12px 48px; }
     .three-numbers-card { padding: 14px 14px; gap: 12px; }
+    .group-chat-callout { padding: 16px 18px 14px; margin: 1.75rem 0 2rem; }
     .dropcap::first-letter {
       font-size: 3em;
       padding: 4px 8px 0 0;
@@ -401,55 +473,48 @@
       <span class="masthead-dot"></span>
       <span class="masthead-issue">Vol. 2026 · No. 1</span>
     </div>
-    <h1 class="masthead-title"><a href="https://njrama.github.io/dynasty-dispatch/" style="color: inherit; text-decoration: none; display: block;" aria-label="The Hoe Ass Dynasty Dispatch — back to archive"><svg class="masthead-svg" viewBox="0 0 1600 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><text x="800" y="125" text-anchor="middle" textLength="1480" lengthAdjust="spacingAndGlyphs" font-family="Georgia, 'Playfair Display', 'Times New Roman', serif" font-weight="900" font-size="110" letter-spacing="-3" fill="#f0f6fc">The <tspan fill="#58a6ff" font-style="italic">Hoe Ass Dynasty</tspan> Dispatch</text><line x1="500" y1="165" x2="1100" y2="165" stroke="#30363d" stroke-width="0.5"/><text x="800" y="195" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="14" letter-spacing="4" fill="#8b949e">EST. 2025 · A WEEKLY COLUMN</text></svg></a></h1>
-    <div class="masthead-sub">Saturday, May 23, 2026 · Week 1 column</div>
+    <h1 class="masthead-title"><a href="https://njrama.github.io/dynasty-dispatch/" style="color: inherit; text-decoration: none;">The <span class="league">Hoe Ass Dynasty</span> Dispatch</a></h1>
+    <div class="masthead-sub">Tuesday, September 15, 2026 · Week 1 column</div>
   </div>
-  <h2>THE DYNASTY DISPATCH</h2>
-<h3>Week 1 — The Season Before The Season</h3>
-<h2>THE STATE OF THE LEAGUE</h2>
-<p class="dropcap">Year two opens with the kind of offseason that tells you the league has matured. The rookie draft just wrapped, the trade tab on Sleeper read like a stock ticker for three straight weeks, and the constitution got an overhaul: bigger benches, an IR slot, a taxi squad. The infrastructure now matches the obsession. Nobody has played a game yet, but the standings on paper have already shifted dramatically from where they ended last December, and the divide between the managers building something and the managers reacting to things has never been more obvious. Week 1 kicks off Thursday. The roster construction battles are already over, and a few of them weren't close.</p>
-<h2>POWER RANKINGS</h2>
+  <h2>The State of the League</h2>
+<p class="dropcap">Week 1 of Year 2 offers a clean board and a familiar problem: six teams are 1-0, six are 0-1, and the standings tell you almost nothing yet. What they do tell you is that the defending champ is already 0-1 after A.J. Brown walked off with a high ankle sprain, the reigning last-place finisher managed to lose by 46 while trading away another premium asset, and 11dhall — who reportedly hasn't logged in since June — dropped 169 points in his opener. The preseason narrative said this was a two-tier league with rdfergus15 and jaytherulerx21 on top and everyone else scrambling. Week 1 mostly agreed, then threw in some noise to keep everyone honest.</p>
+<aside class="group-chat-callout" aria-label="From the group chat"><div class="group-chat-label">From the Group Chat</div><blockquote class="group-chat-quote"><span class="group-chat-mark">&ldquo;</span>Trade made sense if Jacobs doesn't get his ass arrested.</blockquote><div class="group-chat-attr">— Julian, trying to rationalize giving away the best player in the draft, RB Jeremiyah Love.</div></aside><h2>Power Rankings</h2>
 <ol>
-<li class="rank-1"><strong>My team REEKS (0-0)</strong> — Rdfergus spent the offseason quietly assembling the league's most valuable roster while everyone else was tweeting about their draft grades. The Jeremiyah Love-for-veterans heist with Julian was the headline, but the Puka-for-Gibbs swap with Pat is the move that actually changed the ceiling. A backfield of Gibbs and Love behind a receiver room of Brian Thomas, Egbuka, and Jameson Williams, with Brock Bowers at tight end. The co-commissioner does not appear to be using his powers for evil. He is using them to draft well. <span class="rank-change rank-change-up" aria-label="Up 1 from last week"><span class="arrow">▲</span>1</span></li>
-<li class="rank-2"><strong>Cant Kill Bill 🗡️ (0-0)</strong> — The youngest contending roster in the league got younger. Jordyn Tyson at 1.03 was a luxury pick on draft night and a potential lineup starter by October if the Rashee Rice situation breaks the way it's trending. Flipping Jalen Coker for Kyle Pitts patched the one real hole. Jay is doing the thing where you accumulate young value and somehow also win now. <span class="rank-change rank-change-down" aria-label="Down 1 from last week"><span class="arrow">▼</span>1</span></li>
-<li class="rank-3"><strong>The Tet Offensive (0-0)</strong> — The defending champ ran the most transactions of any manager this offseason and it wasn't close. Twelve moves on the wire, four trades, and a clear thesis: fix the RB2 spot. Dowdle, Jonah Coleman, Kaytron Allen, and the DJ Giddens cameo before flipping him back to Bateman. The Bijan-A.J. Brown core is still elite. The depth is the best it's been since he lifted the trophy. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
-<li><strong>BatemanS (0-0)</strong> — Three trades, a draft pick swap, and a tight end room that got reshuffled twice before settling on Colston Loveland, Oronde Gadsden, and rookie Kenyon Sadiq. Bateman was the most active trade partner in the league this offseason — every other team's transaction log has his name on it somewhere. He came out the other side with a Ja'Marr Chase-Jonathan Taylor spine and a James Conner handcuff. Hard to argue with the process. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
-<li><strong>kdicillo (0-0)</strong> — A quiet offseason by this league's new standards, which after last year's injury luck is probably the point. Jadarian Price in the rookie draft was a sneaky-good youth infusion behind a Lamar-Nabers-Garrett Wilson core. If health cooperates this time, this roster plays up a tier. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
-<li><strong>Green Eggs and Hampton (0-0)</strong> — Pat read the pre-draft newsletter, took the WR criticism personally, and traded Jahmyr Gibbs for Puka Nacua. That's responsiveness. Whether trading away an elite young RB for an elite young WR actually solves the positional imbalance or just moves the problem is a question Week 1 will start to answer. Denzel Boston in the draft suggests the plan continues. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
-<li><strong>SomethingStrange 4 Change (0-0)</strong> — GBdynasty entered the offseason with a strong WR room and walked out with a stronger one, plus Eli Stowers to address the tight end spot. Antonio Williams in the second was the kind of value pick that makes other managers grimace when they review the draft board later. The roster is balanced; the upside hinges on Dak. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
-<li><strong>Ms. New Boutte (0-0)</strong> — Method flipped Matthew Stafford and Kenneth Gainwell for a 2028 first, which is exactly the kind of trade a manager makes when he's looking at his window honestly. Burrow, Jeanty, Nico, and a stockpile of future capital. This is a retool dressed up as a contender, and it might be the smartest play in the league. <span class="rank-change rank-change-up" aria-label="Up 1 from last week"><span class="arrow">▲</span>1</span></li>
-<li><strong>A Swift End (0-0)</strong> — Terra had the most chaotic offseason in the league and it wasn't close. The Bucky Irving trade from last year officially completed its metamorphosis into Juwan Johnson, which will live in this column forever. But the rookie draft was genuinely strong — Carnell Tate at 2.02, Singleton in the second, smart value throughout. The rebuild is real and, against all odds, on track. <span class="rank-change rank-change-up" aria-label="Up 1 from last week"><span class="arrow">▲</span>1</span></li>
-<li><strong>11dhall (0-0)</strong> — Got autopicked multiple times in a 24-hour-clock rookie draft. Drafted two players named Bell. The roster is aging, the manager is unreachable, and the puppy is apparently winning the attention battle. Josh Allen and CMC will keep this team competitive for a while regardless, which is somehow the most frustrating part. <span class="rank-change rank-change-down" aria-label="Down 2 from last week"><span class="arrow">▼</span>2</span></li>
-<li><strong>bhstevens21 (0-0)</strong> — KC Concepcion in the first was a real pick by a manager who appears to have finally accepted this is a dynasty league. The roster construction is still caught between Derrick Henry's twilight and Caleb Williams' learning curve, but the WR youth movement started in earnest this offseason. Direction matters. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
-<li><strong>julianad112 (0-0)</strong> — Traded the 1.01 to rdfergus for the 1.05, Courtland Sutton, and Jaylen Warren. In back-to-back years has shipped his top first to the same manager for aging veterans. Last season's last-place finisher is, by every measurable signal, building to finish last again. At some point this stops being a coincidence. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
+<li class="rank-1"><strong>rdfergus15 (Love Beatin My Meat) (1-0)</strong> — Gibbs went for 156 and 2 on the ground, McPherson dropped 19 from the kicker slot, and Julian obliged with a 91-point face-plant across the way. The roster still profiles as the league's deepest, and Bowers is coming. Nothing about Week 1 argues against the preseason read. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
+<li class="rank-2"><strong>jaytherulerx21 (Cant Kill Bill 🗡️) (1-0)</strong> — Kenneth Walker's 173-yard, 2-TD Monday night was the kind of outlier performance that turns a comfortable win into a laugher. The young core (Amon-Ra, Cook, London, Maye) is the blueprint every rebuilder in this league claims to be following. Jay is just further along. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
+<li class="rank-3"><strong>11dhall (1-0)</strong> — 169 points from a manager whose entire offseason strategy was "do not log in." Josh Allen hung 35, JSN went for 122 and a score, Goedert had two TDs, and the roster he drafted last summer is still, somehow, one of the best in the league. <span class="rank-change rank-change-up" aria-label="Up 6 from last week"><span class="arrow">▲</span>6</span></li>
+<li><strong>kdicillo (1-0)</strong> — David Montgomery's three-touchdown afternoon and a Lamar Jackson special did most of the work. It wasn't loud, but 134 against a real roster travels. Last year's injury luck was brutal; a clean opening week is a nice change. <span class="rank-change rank-change-flat" aria-label="No change from last week">—</span></li>
+<li><strong>GBdynasty (SomethingStrange 4 Change) (1-0)</strong> — Chris Olave's 10-for-182 was the game-swinger, and Kincaid chipped in 130 receiving from the tight end spot. The only cloud is Ladd McConkey leaving with a rib injury after 82 yards and a score. Worth watching all week. <span class="rank-change rank-change-up" aria-label="Up 2 from last week"><span class="arrow">▲</span>2</span></li>
+<li><strong>Terra2493 (A Swift End) (1-0)</strong> — Upset the reigning champ 156-151 with Swift, Jefferson, and Flowers all going for 26+ despite Stafford turning in a five-spot. The starting eight is legitimately dangerous. The bench lacks depth, which is the ranking's central tension. <span class="rank-change rank-change-up" aria-label="Up 4 from last week"><span class="arrow">▲</span>4</span></li>
+<li><strong>njramadan (The Tet Offensive) (0-1)</strong> — Scored 151 and lost, which is the fantasy equivalent of pitching a two-hitter and getting no-decisioned. AJ Brown's ankle turned a bad weekend into a six-week problem. The championship roster is still the championship roster; the schedule and the injury report just conspired to make Week 1 the worst version of it. <span class="rank-change rank-change-down" aria-label="Down 4 from last week"><span class="arrow">▼</span>4</span></li>
+<li><strong>batemans (BatemanS) (0-1)</strong> — Jonathan Taylor and Jalen Coker delivered, and it didn't matter because Chase went for 3.2, Waddle for 1.2, and Loveland was shut out. When your top-tier assets all no-show the same week, you lose to kdicillo. It happens once. If it happens twice, we talk. <span class="rank-change rank-change-down" aria-label="Down 3 from last week"><span class="arrow">▼</span>3</span></li>
+<li><strong>bhstevens21 (0-1)</strong> — Caleb Williams (37.3) and Derrick Henry (35.3) went nuclear and it still wasn't close, because behind them the roster is Achane, Barkley, and a lot of names that used to matter. 144 points sounds like a competitive loss until you notice Dhall put up 169. The veterans-heavy build is going to keep producing weeks like this. <span class="rank-change rank-change-up" aria-label="Up 3 from last week"><span class="arrow">▲</span>3</span></li>
+<li><strong>method8282 (Ms. New Boutte) (0-1)</strong> — Jeanty went for 32.7 and Collins for 21.2, right on the marketing brochure. Then Burrow scraped together 15, Ferguson caught two for six yards, and the depth stopped at three names. This roster's ceiling depends on Burden making a leap. Week 1 said not yet. <span class="rank-change rank-change-down" aria-label="Down 2 from last week"><span class="arrow">▼</span>2</span></li>
+<li><strong>pking0721 (Green Eggs and Hampton) (0-1)</strong> — Puka's 12.4 was the disappointment of the week from an elite-tier receiver, and Pickens only managed 5.8 while dropping several passes. Sat 109.6 bench points in a game he lost by 47. Vibes-based lineup setting caught up quickly. <span class="rank-change rank-change-down" aria-label="Down 5 from last week"><span class="arrow">▼</span>5</span></li>
+<li><strong>julianad112 (0-1)</strong> — Scored 91. Started a backup Jets tight end. Traded Justin Herbert for Mike Evans — a receiver he drafted last year and cut for reasons still under investigation. Meanwhile, his RB1 was sitting on the Commissioner's Exempt List. The rebuild continues in the wrong direction. <span class="rank-change rank-change-down" aria-label="Down 1 from last week"><span class="arrow">▼</span>1</span></li>
 </ol>
-<h2>GAME OF THE WEEK</h2>
-<p><strong>The Tet Offensive vs. A Swift End.</strong> The defending champ against the league's most active rebuilder, and it's the perfect Week 1 lens. Njramadan spent the offseason patching every weakness on a championship roster — he's chasing a repeat with a deeper team than the one that won it. Terra spent the offseason getting roasted in the group chat, then quietly drafted well enough to start climbing out of the basement. Bijan Robinson and A.J. Brown against Justin Jefferson and Trey McBride is a real matchup. If Terra steals this one, the rebuild gets a jolt of credibility it desperately needs. If njramadan handles business, the title defense starts exactly the way a title defense should.</p>
-<h2>THREE NUMBERS</h2>
-<div class="three-numbers-card"><div class="num">12</div><div class="body-text">Transactions logged by njramadan during the offseason, the most of any manager in the league. The champ is treating the title like a starting point, not a finish line. Most defending champs coast. This one is sprinting.</div></div>
-<div class="three-numbers-card"><div class="num">2</div><div class="body-text">Consecutive years julianad112 has traded his first-round rookie pick to rdfergus15 for a package of aging veterans. The 2027 first that became Brock Bowers last year. The 2026 first that became Jeremiyah Love this year. At some point the pattern stops being bad luck.</div></div>
-<div class="three-numbers-card"><div class="num">3</div><div class="body-text">Tight ends Bateman owned at different points during the rookie draft alone. Juwan Johnson out to Terra, Kyle Pitts out to Jay, Kenyon Sadiq drafted in. He turned positional surplus into a wide receiver, a young TE prospect, and clean roster construction in roughly 90 minutes of draft clock.</div></div>
-<h2>TRANSACTION WIRE</h2>
+<h2>Game of the Week</h2>
+<p>Terra 156.6, njramadan 151.4. The champ ran into a buzzsaw at exactly the wrong time. D'Andre Swift's three-touchdown afternoon and Justin Jefferson's 2-TD line gave Terra a lead he never quite surrendered, even as Bijan Robinson (31.3), Christian Watson (147 and 2), and Isaiah Likely (27.8 on Sunday night) kept clawing njramadan back into it. The margin was 5.2. The AJ Brown injury, which will cost njramadan his WR1 for six weeks, was the loudest thing to happen all weekend and it barely showed up in the box score. Terra spent last year making trades that his league mates are still talking about; this week he took down the defending champ. The roster underneath still has to prove it can contend, but for now, the upset's on the board and njramadan's the one nursing the injury report.</p>
+<h2>Three Numbers</h2>
+<div class="three-numbers-card"><div class="num">169.3</div><div class="body-text">Dhall's winning total, the highest score of Week 1. Produced by a manager who doesn't check his roster and won't be making moves this year. The rest of the league should find this either motivating or infuriating.</div></div>
+<div class="three-numbers-card"><div class="num">3.2</div><div class="body-text">Ja'Marr Chase's PPR output on 2 receptions for 12 yards. The consensus WR1 in dynasty produced a stat line that would embarrass a WR5, and it directly cost batemans a winnable opener. One week. Deep breath.</div></div>
+<div class="three-numbers-card"><div class="num">37.3</div><div class="body-text">Caleb Williams's line for bhstevens21, the top score by any player at any position this week. It came in a 24-point loss. When your ceiling game from your quarterback isn't enough, the roster is the problem, not the lineup.</div></div>
+<h2>Transaction Wire</h2>
 <ul>
-<li><strong>rdfergus15 trades Puka Nacua to pking0721 for Jahmyr Gibbs.</strong> Both managers got what they wanted. Pat upgrades a WR room that needed it; Reggie pairs Gibbs with Love for the league's scariest backfield. Position-for-position swaps of this caliber are rare. This one might define both seasons.</li>
-<li><strong>rdfergus15 trades 1.05, Courtland Sutton, and Jaylen Warren to julianad112 for 1.01.</strong> That pick became Jeremiyah Love. Julian got veterans whose value is already trending down. This is the trade the league will reference for years.</li>
-<li><strong>njramadan trades Josh Downs to rdfergus15 for Rico Dowdle.</strong> A fair, needs-based swap. Reggie wanted route-runner depth. Nick wanted a real RB2. Both got it.</li>
-<li><strong>Terra2493 trades a 2028 first to method8282 for Matthew Stafford and Kenneth Gainwell.</strong> Stafford is 37. The pick is three years out. Method made the calmer, more rational decision.</li>
-<li><strong>Terra2493 trades Stefon Diggs to batemans for John Metchie and a 2027 third.</strong> The Diggs window closed; the future capital is what a rebuilder needs.</li>
-<li><strong>batemans trades Kyle Pitts to jaytherulerx21 for Jalen Coker.</strong> Both managers identified what they needed and made the simple call.</li>
-<li><strong>batemans trades Juwan Johnson to Terra2493 for Tank Bigsby and 2.03.</strong> Bateman cashing positional surplus for draft capital.</li>
-<li><strong>batemans trades DJ Giddens (and pick swap) to njramadan.</strong> Then promptly reacquired him on waivers. The Jonathan Taylor handcuff hunt is real.</li>
+<li><strong>rdfergus15 acquires Justin Herbert from julianad112 for Mike Evans.</strong> The co-commissioner adds a top-eight dynasty QB to a roster that already ranks first in value. Julian receives a 33-year-old wideout he previously drafted and dropped.</li>
+<li><strong>rdfergus15 adds Darren Waller off waivers, drops David Njoku.</strong> A low-cost dart throw at the tight end position while Bowers works back.</li>
+<li><strong>julianad112 adds Michael Mayer, drops J'Mari Taylor.</strong> Sensible depth grab at TE for a roster that just started Mason Taylor.</li>
+<li><strong>pking0721 adds Dontayvion Wicks.</strong> Depth WR add during a week where his flex spots produced very little.</li>
 </ul>
-<h2>MANAGER SUPERLATIVES</h2>
+<h2>Manager Superlatives</h2>
 <ul>
-<li><strong>Lineup Decision of the Week:</strong> Too early. Save it.</li>
-<li><strong>Roster Move of the Week:</strong> rdfergus15's Puka-for-Gibbs swap with pking0721. Both sides win and the league's positional scarcity map got redrawn.</li>
-<li><strong>Performance of the Week:</strong> Pending kickoff. Check back Tuesday.</li>
-<li><strong>Offseason MVP:</strong> njramadan, for treating the championship defense like an actual job.</li>
+<li><strong>Lineup Decision of the Week:</strong> rdfergus15 for starting Evan McPherson, who dropped 19 points and swung a matchup that was already going to be a blowout into a demolition.</li>
+<li><strong>Performance of the Week:</strong> Caleb Williams, 37.3 points on 269 passing, 2 passing TDs, 65 rushing yards, and 2 rushing TDs for bhstevens. The highest single-player output on the slate.</li>
+<li><strong>Comeback Attempt of the Week:</strong> Isaiah Likely's 27.8 on Sunday night for njramadan, which turned a blowout loss into a heartbreaker and made Terra sweat until the final whistle.</li>
 </ul>
-<h2>THE CRYSTAL BALL</h2>
-<p>Jeremiyah Love finishes his Week 1 debut as a top-12 RB, and somewhere in a Discord channel, julianad112 stops responding for 48 hours.</p>
-<p><em>See you Tuesday.</em></p>
+<h2>The Crystal Ball</h2>
+<p>Terra's magic was a one-week rental. Without Zay Flowers, Week 2 finds out what this roster actually is.</p>
+<p><em>See you next Tuesday.</em></p>
 </div>
 </body>
 </html>
